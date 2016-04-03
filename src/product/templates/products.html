@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}
+    Все записи блога{% endblock %})
+ {% block content %}
+     {{text}}
+
+     <form action="" method="get">
+        {% comment %}  <select name="sort_field">
+            <option value="-id">ID</option>
+            <option value="created_at">Дата создания</option>
+            <option value="title">Заголовок</option>
+        </select>
+         <input type="text" name="search">
+
+        {% endcomment %}
+         <input type="submit">
+        {{ form }}
+        {{ form.search.errors }}
+        {{ form.errors }}
+     </form>
+
+
+     <form action="" method="post">
+         {% csrf_token %}
+        {{ pform }}
+     <input type="submit">
+     </form>
+
+
+     {% for object in object_list %}
+         {# {{post.id}} #}
+         <a href="{%url  "product:about_product" pk=object.id %}">{{object.title}}</a><br>
+         Запись создана: {{object.created_at}} <br>
+         {# Последнее изменение: {{post.changed_at}} #}
+    {% endfor %}
+ {% endblock %}

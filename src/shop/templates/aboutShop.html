@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}
+    {{object.title|default:'Запись блога'}}
+{% endblock %})
+{% block content %}
+    <h3>{{object.title}}</h3>
+    <br> {{ object.text }} <br>
+    Запись создана: {{object.created_at}}<br>
+    {# Запись изменена: {{ postToPrint.changed_at }} <br> <br> #}
+    <a href="{% url "blog:listOfPosts" %}">Домой</a><br>
+ {% endblock %}
