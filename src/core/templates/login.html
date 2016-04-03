@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block title %}
-    Logout
+    Login
 {% endblock %})
 {% block content %}
+    <h2>Регистрация</h2>
     <form method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit">
     </form>
- {% endblock %}
+{% endblock  %}

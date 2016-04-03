@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'comment',
     'core',
     'shop',
     'product',
@@ -128,3 +127,6 @@ STATICFILES_DIRS = ('/home/oem/Documents/technotrack/web/site/src/static/', )
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/home/oem/Documents/technotrack/web/site/media/'
+
+LOGIN_REDIRECT_URL = "core:main_page"
+LOGIN_URL = "core:login"

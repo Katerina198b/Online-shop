@@ -3,8 +3,7 @@
 from django.shortcuts import render, resolve_url
 from django.shortcuts import HttpResponse, HttpResponseRedirect
 from django.views.generic import DetailView, ListView, CreateView
-from .models import Product
-from comment.models import Comment
+from .models import Product, Comment
 from shop.models import Shop
 from forms import *
 
@@ -22,6 +21,16 @@ class ProductCreate(CreateView):
         # в этот метод поступает форма
         # form.instance.author = self.request.user
         return super(ProductCreate, self).form_valid(form)
+
+class CommentCreate(CreateView):
+    model = Comment
+    fields = ('text')
+
+    def get_success_url(self):
+        return resolve_url('product:about_product')
+
+    def form_valid(self, form):
+        return super(CommentCreate, self).form_valid(form)
 
 
 class ProductDetail(DetailView):
@@ -45,11 +54,13 @@ class ProductList(ListView):
         if self.form.cleaned_data.get('sort_field'):
             queryset = queryset.order_by(self.form.cleaned_data['sort_field'])[:10]
         # queryset = queryset.filter(author=self.request.user)
+        #if self.form.cleanded_data.get('quantity'):
+        #    queryset = queryset[:self.form.sort_field]
         return queryset
 
     def dispatch(self, request, *args, **kwargs):  # вызывается при любом запросе к списку обтектов
         self.form = ProductListForm(request.GET)
-        self.pform = ProductForm(request.POST or None)
+        self.cform = CommentForm(request.POST or None)
         self.form.is_valid()  # соответствуют ли данные введенные пользователем формочке
         # self.sort_field = request.GET.get('sort_field')
         # self.search = request.GET.get('search')
@@ -62,5 +73,5 @@ class ProductList(ListView):
     def get_context_data(self, **kwargs):
         context = super(ProductList, self).get_context_data(**kwargs)
         context['form'] = self.form
-        context['pform'] = self.pform
+        context['cform'] = self.cform
         return context

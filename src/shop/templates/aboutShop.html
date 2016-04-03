@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block title %}
-    {{object.title|default:'Запись блога'}}
+    {{object.name|default:'Название магазина'}}
 {% endblock %})
 {% block content %}
-    <h3>{{object.title}}</h3>
-    <br> {{ object.text }} <br>
-    Запись создана: {{object.created_at}}<br>
-    {# Запись изменена: {{ postToPrint.changed_at }} <br> <br> #}
-    <a href="{% url "blog:listOfPosts" %}">Домой</a><br>
+    <h3>{{object.name}}</h3>
+    Владелец: {{ object.owner }} <br>
+    <h4>Описание магазна:</h4>
+    {{ object.description }} <br> <br> <br>
+    Дата создания магазина: {{object.created_at}}<br> <br> <br>
+    <a href="{% url "shop:shops" %}">Назад к списку магазинов</a><br>
  {% endblock %}

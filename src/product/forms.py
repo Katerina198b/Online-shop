@@ -8,18 +8,24 @@ from django import forms
 '''
 class ProductListForm(forms.Form):
 
-    search = forms.CharField(required=False)
-    sort_field = forms.ChoiceField(choices=(('id', 'ID'), ('created_at', 'Дата создания')), required=False)
+    #quantity = forms.ChoiceField(choices=)
+    search = forms.CharField(required=False, label="Поиск по имени товара")
+    sort_field = forms.ChoiceField(choices=(('changed_at', 'Дата изменения'),
+            ('created_at', 'Дата создания')),required=False, label='Сортировка ')
 
     # возвращает словарик cleaning_data
     # либо выбрасывает exception
-    def clean(self):
-        raise forms.ValidationError('я не хочу искать и сортировать')
+    #def clean(self):
+
+        #raise forms.ValidationError('я не хочу искать и сортировать')
 
     #def clean_search(self):
     #    search = self.cleaned_data('search')
     #   raise forms.ValidationError('я не хочу искать')
     #    return search
+
+    class Meta:
+        verbose_name = "lollolo"
 
 class ProductForm(forms.Form):
 
@@ -27,4 +33,8 @@ class ProductForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea)
     #widget - класс отвечающий за показ элементов ввода
     #class Meta:
+
+class CommentForm(forms.Form):
+
+    text = forms.CharField(widget=forms.Textarea, label="Текст комментария")
 

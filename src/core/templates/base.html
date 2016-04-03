@@ -1,5 +1,14 @@
 <title>{% block title %}{% endblock %}</title>
+<a href="{% url "product:products" %}">Список товаров </a>
+<a href="{% url "shop:shops" %}">Список магазинов </a>
+<a href="{% url "core:main_page" %}">На главную  </a>
+<div align="right">
+    {% if user.is_authenticated %}
+        {{ user.username }} <br>
+        <a href="{% url "logout" %}">Выход из системы  </a>
 
- {% block content %}
+    {% else %}
+       <a href="{% url "login" %}">Вход в систему  </a>
+    {% endif %}</div>
 
- {% endblock %}
+ {% block content %} {% endblock %}

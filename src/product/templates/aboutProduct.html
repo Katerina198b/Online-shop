@@ -1,12 +1,25 @@
+
 {% extends "base.html" %}
+{% load static %}
 {% block title %}
     {{ object.name|default:'Название товара' }}
-    {{ object.image }}
+
 {% endblock %})
 {% block content %}
+
     <h3>{{ object.name }}</h3>
+    {% if object.image %}
+        <img src="{{ object.image.url }}" /> <br>
+    {% else %}
+        <img src="{% static "img/product-default.jpg" %}" />
+    {% endif %}
     <br> {{ object.description }} <br>
     Запись создана: {{object.created_at}}<br>
-     Запись изменена: {{ object.changed_at }} <br> <br>
+    Запись изменена: {{ object.changed_at }} <br> <br>
+    <h3>Комментарии:</h3>
+    {% for comment in object.comments.all %}
+        {{ comment.text }}<br>
+    {% endfor %}
+    <br><br>
     <a href="{% url "product:products" %}">Назад к списку товаров</a><br>
  {% endblock %}
