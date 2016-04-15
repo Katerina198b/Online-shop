@@ -1,44 +1,112 @@
 # -*- coding: utf-8 -*-v
-
-from django.shortcuts import render, resolve_url
+from django.shortcuts import render, resolve_url, get_object_or_404
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from django.views.generic import DetailView, ListView, CreateView
-from .models import Product, Comment
+from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from shop.models import Shop
+from .models import Product, Comment
+
 from forms import *
+from django.conf import settings
+from django.shortcuts import redirect
+
+def productLike(request, pk):
+    product = Product.objects.get(id=pk)
+    product.like = product.like + 1
+    product.save();
+    render(request, "like.html")
+    return render(request, 'like.html', {'product': product})
+
+def productDislike(request, pk):
+    product = Product.objects.get(id=pk)
+    product.like = product.dislike + 1
+    product.save();
+    render(request, "dislike.html")
+    return render(request, 'like.html', {'product': product})
+
+
+
+
+class ProductUpdate(UpdateView):
+
+    model = Product
+    template_name = "updateProduct.html"
+    fields = ('name', 'description', 'image')
+
+
+    def get_success_url(self):
+
+        return resolve_url('product:about_product', pk=self.object.pk)
 
 
 class ProductCreate(CreateView):
+
     model = Product
     template_name = "createProduct.html"
-    fields = ('name', 'description')
+    fields = ('name', 'description', 'image', 'publish')
+
+
+    def dispatch(self, request, pk=None, *args, **kwargs):
+        self.shop = get_object_or_404(Shop, id=pk)
+        return super(ProductCreate, self).dispatch(request, *args, **kwargs)
+
 
     def get_success_url(self):
+
         return resolve_url('product:about_product', pk=self.object.pk)
 
-    # в этом методе сохраняется модель
+
     def form_valid(self, form):
+
         # в этот метод поступает форма
-        # form.instance.author = self.request.user
+        form.instance.shop = self.shop
+        form.instance.author = self.request.user
         return super(ProductCreate, self).form_valid(form)
 
-class CommentCreate(CreateView):
+
+class CommentsUpdate(DetailView):
+
+    template_name = "updateComments.html"
+    model = Product
+
+
+
+class ProductDetail(CreateView):
+
     model = Comment
-    fields = ('text')
+    template_name = "aboutProduct.html"
+    fields = ('text', )
+
+
+    def get_context_data(self, **kwargs):
+
+        self.context = super(ProductDetail, self).get_context_data(**kwargs)
+        self.context['product'] = self.product
+        return self.context
+
+
+    def dispatch(self, request, pk=None, *args, **kwargs):
+
+        self.product = get_object_or_404(Product, id=pk)
+
+        return super(ProductDetail, self).dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        return resolve_url('product:about_product')
+
+        return resolve_url('product:about_product', pk=self.product.pk)
+
 
     def form_valid(self, form):
-        return super(CommentCreate, self).form_valid(form)
 
 
-class ProductDetail(DetailView):
-    model = Product
-    template_name = "aboutProduct.html"
+        if not self.request.user.is_authenticated():
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, self.request.path))
+        form.instance.product = self.product
+        form.instance.author = self.request.user
+        return super(ProductDetail, self).form_valid(form)
 
 
 class ProductList(ListView):
+
     model = Product
     template_name = "products.html"
 
@@ -58,7 +126,9 @@ class ProductList(ListView):
         #    queryset = queryset[:self.form.sort_field]
         return queryset
 
-    def dispatch(self, request, *args, **kwargs):  # вызывается при любом запросе к списку обтектов
+    def dispatch(self, request, *args, **kwargs):
+
+        # вызывается при любом запросе к списку обтектов
         self.form = ProductListForm(request.GET)
         self.cform = CommentForm(request.POST or None)
         self.form.is_valid()  # соответствуют ли данные введенные пользователем формочке
@@ -71,6 +141,7 @@ class ProductList(ListView):
         '''
 
     def get_context_data(self, **kwargs):
+
         context = super(ProductList, self).get_context_data(**kwargs)
         context['form'] = self.form
         context['cform'] = self.cform

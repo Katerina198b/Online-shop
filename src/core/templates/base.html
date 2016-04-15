@@ -1,14 +1,69 @@
-<title>{% block title %}{% endblock %}</title>
-<a href="{% url "product:products" %}">Список товаров </a>
-<a href="{% url "shop:shops" %}">Список магазинов </a>
-<a href="{% url "core:main_page" %}">На главную  </a>
-<div align="right">
-    {% if user.is_authenticated %}
-        {{ user.username }} <br>
-        <a href="{% url "logout" %}">Выход из системы  </a>
+{% load static %}
+{% load widget_tweaks %}
+<head>
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/base.css" %}">
+    <script  src="{% static "js/base.js" %}"></script>
+    {# <script scr="{% static "jquery-2.2.3.min.js" %}"></script> #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-    {% else %}
-       <a href="{% url "login" %}">Вход в систему  </a>
-    {% endif %}</div>
 
- {% block content %} {% endblock %}
+</head>
+<body>
+{# шапка сайта #}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <img src="{% static "logo.jpg" %}" height="100" width="100"/>
+            </div>
+            <div class="col-lg-6">
+                <div class="col-lg-7">
+                        Каккие то бкзумно важные слова
+                </div>
+                <div class="col-lg-4">
+                    {% if user.is_authenticated %}
+                        <div> {{ user.username }} </div>
+                        {% if user.shop_set.all.first != null %}
+                            <a href="{%url "shop:about_shop" pk=user.shop_set.all.first.id %}"> Мой магазин </a>
+                        {% else %}
+                            <a href="{% url "shop:shop_create" %}"> Cоздать свой магазин </a>
+                        {% endif %}
+                        <a href="{% url "logout" %}"> Выход </a>
+                    {% else %}
+                        <input type="button" class="btn" onclick="logo()" value="Войти">
+                        <a href="{% url "login" %}"> Вход </a>  / <a href="{% url "core:register" %}"> Регистрация </a><br>
+                        <a href="{% url "shop:shop_create" %}"> Cоздать свой магазин </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="formdiv" data-update-from="{% url 'login' %}" style="display: none; background-color: rgba(0,0,0,0.5); position: fixed; top:0; bottom: 0;left: 0;right: 0">
+    <form method="post" class="form-inline">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+</div>
+
+{# меню сайта #}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <h5> <a href="{% url "product:products" %}">Каталог товаров</a></h5>
+        </div>
+        <div class="col-lg-3">
+            <h5> <a href="{% url "shop:shops" %}">Каталог магазинов</a></h5>
+        </div>
+        <div class="col-lg-3">
+            <h5><a href="{% url "core:main_page" %}">На главную </a></h5>
+        </div>
+        <div>
+            <h5> Поддержка </h5>
+        </div>
+    <title>{% block title %}{% endblock %}</title>
+
+
+
+     {% block content %} {% endblock %}
+</body>

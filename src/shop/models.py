@@ -10,10 +10,10 @@ class Shop(models.Model):
         return (self.name)
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
-    owner = models.CharField(max_length=255, verbose_name='Владелец', default='Владелец')
+    owner_name = models.CharField(max_length=255, verbose_name='Имя')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')  # время создания
-    name = models.CharField(max_length=255, verbose_name='Заголовок', default='Название магазина')
-    description = models.TextField(verbose_name='Краткое описание', default='Краткое описание')
+    name = models.CharField(max_length=255, verbose_name='Заголовок')
+    description = models.TextField(verbose_name='Краткое описание')
 
     class Meta:
         verbose_name = "Магазин"

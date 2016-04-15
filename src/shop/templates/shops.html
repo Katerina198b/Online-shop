@@ -6,15 +6,28 @@
 {% block content %}
 
     <h1> Список магазинов </h1>
-    <form action="" method="get">
-
-       {{ form }}
-        <input type="submit">
+    <form action="" method="get" class="form-inline" role="form">
+        <div class="form-group">
+            <h5>Поиск по имени магазина</h5>
+            {{ form.search }}
+        </div>
+        <div class="form-group">
+            <input type="submit" class="form-control" >
+        </div>
     </form>
 
-    {% for object in object_list %}
-         <a href="{%url  "shop:about_shop" pk=object.id %}">{{object.name}}</a><br>
-         Магазин создан: {{object.created_at}} <br>
-    {% endfor %}
-
+    <table class="table table-hover">
+   <tr>
+        <th>НАЗВАНИЕ</th>
+        <th>ВЛАДЕЛЕЙ</th>
+        <th>ДАТА СОЗДАНИЯ</th>
+   </tr>
+        {% for object in object_list %}
+            <tr>
+                <td><a href="{%url  "shop:about_shop" pk=object.id %}">{{object.name}}</a></td>
+                <td>{{ object.owner }}</td>
+                <td> {{object.created_at}} </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

@@ -36,5 +36,5 @@ class ProductForm(forms.Form):
 
 class CommentForm(forms.Form):
 
-    text = forms.CharField(widget=forms.Textarea, label="Текст комментария")
-
+    text = forms.CharField(widget=forms.Textarea)
+    author = forms.CharField()

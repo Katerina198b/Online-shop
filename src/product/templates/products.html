@@ -1,33 +1,40 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% block title %}
     Товары
 {% endblock %})
 {% block content %}
     <h1>Список товаров</h1> <br>
-    <form action="" method="get">
-       {{ form }}
-       {% comment %}  <select name="sort_field">
-           <option value="-id">ID</option>
-           <option value="created_at">Дата создания</option>
-           <option value="title">Заголовок</option>
-       </select>
-       <input type="text" name="search">
-       {% endcomment %}
-        <input type="submit">
-        {# form.search.errors #}
-        {# form.errors #}
+    <form action="" method="get" class="form-inline" role="form">
+        <div class="form-group">
+            <h5>Поиск товара по имени </h5>{% render_field form.search class="form-control"%}
+        </div>
+        <div class="form-group">
+            {% render_field form.sort_field class="form-control" %}
+        </div>
+        <div class="form-group">
+            <input type="submit" class="form-control" >
+        </div>
     </form>
     <br>
-    {% for object in object_list %}
-         <a href="{%url  "product:about_product" pk=object.id %}">{{ object.name }}</a><br>
-         Запись создана: {{ object.created_at }} <br>
-         Последнее изменение: {{ object.changed_at }} <br> <br>
-    {% endfor %}
+        <table class="table table-hover">
+           <tr>
+                <th>НАЗВАНИЕ</th>
+                <th>МАГАЗИН</th>
+                <th>ДАТА СОЗДАНИЯ</th>
+                <th>ДАТА ИЗМЕНЕНИЯ</th>
+           </tr>
 
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ cform }}
-        <input type="submit">
-    </form>
-    <br>
+
+            {% for object in object_list %}
+                {% if object.publish %}
+                    <tr>
+                         <td><a href="{%url  "product:about_product" pk=object.id %}">{{ object.name }}</a></td>
+                         <td> {{ object.shop }}</td>
+                         <td> {{ object.created_at }} </td>
+                         <td> {{ object.changed_at }} </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
  {% endblock %}

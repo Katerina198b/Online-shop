@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', views.ShopDetail.as_view(), name="about_shop"),
     url(r'^shops', views.ShopList.as_view(), name="shops"),
     url(r'^create', login_required(views.ShopCreate.as_view()), name='shop_create'),
+    url(r'^update/(?P<pk>\d+)/', views.ShopUpdate.as_view(), name="update"),
     url(r'^', include('core.urls', namespace="core")),
 ]

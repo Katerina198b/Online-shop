@@ -1,0 +1,4 @@
+{% for comment in object.comments.all %}
+        <h5>{{ comment.author }}</h5>
+        {{ comment.text }} <br>
+    {% endfor %}

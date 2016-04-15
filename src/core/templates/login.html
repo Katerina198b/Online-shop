@@ -1,12 +1,24 @@
+<!DOCTYPE html>
 {% extends "base.html" %}
-{% block title %}
-    Login
-{% endblock %})
-{% block content %}
-    <h2>Регистрация</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit">
-    </form>
-{% endblock  %}
+<head>
+    {% block title %} Login {% endblock %}
+</head>
+<body>
+    {% block content %}
+        <div class="container">
+            <div class="col-lg-6">
+                <h3>Авторизация</h3>
+                <form method="post" class="form-inline">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit">
+                </form>
+            </div>
+            <div class="col-lg-6">
+            </div>
+        </div>
+        {% endblock  %}
+</body>
+</html>
+
+

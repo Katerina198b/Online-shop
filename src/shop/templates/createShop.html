@@ -1,12 +1,38 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
+
 {% block title %}
-    Все записи блога{% endblock %})
-{% block content %}
-     <form method="post">
-        {% csrf_token %}
-         {# этот тег рендерется в скрытое поле формочки #}
-        {{ form }}
-     <input type="submit">
-     </form>
+    Создание магазина
 {% endblock %}
-{{ form }}
+
+
+{% block content %}
+
+    <div class="container">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <h1>Создай свой магазин легко и просто!</h1>
+        <form method="post" class="form-row">
+            {% csrf_token %}
+            <div class="form-group col-lg-10">
+                {% render_field form.owner_name placeholder="Ваши имя и отчество" class="form-control"%}
+            </div>
+            <div class="form-group col-lg-10">
+                {% render_field form.name placeholder="Введите название магазина" class="form-control" %}
+            </div>
+            <div class="form-group col-lg-10">
+                {% render_field form.description placeholder="Введите описание магазина" class="form-control"%}
+            </div>
+            <div class="form-group col-sm-4">
+                <input type="submit" class="form-group btn btn-default">
+            </div>
+
+        </form>
+    </div>
+    <div class="col-lg-2"></div>
+    </div>
+
+
+    </div>
+
+{% endblock %}

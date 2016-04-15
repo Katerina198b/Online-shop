@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %} Регистрация {% endblock %})
+{% load widget_tweaks %}
+
+{% block content %}
+<form method="post" class="form-horizontal" role="form">
+    {% csrf_token %}
+    <div class="container">
+        <h1>Регистрация</h1>
+        <div class="col-lg-6">
+            <div class="form-group col-lg-9">
+                 {% render_field form.first_name class="form-control" placeholder="Ваше имя"%}
+            </div>
+
+            <div class="form-group col-lg-9">
+                 {% render_field form.last_name class="form-control" placeholder="Ваша фамилия"%}
+            </div>
+
+            {% if form.username.errors %}
+                <div class="form-group col-lg-9 has-error">
+                    {{ form.username.errors }}
+                    {% render_field form.username class="form-control" placeholder="Логин"%}
+                </div>
+            {% else %}
+                <div class="form-group col-lg-9">
+                    {% render_field form.username class="form-control" placeholder="Логин"%}
+                </div>
+            {% endif %}
+            <div class="form-group col-lg-9">
+                {% render_field form.password1 class="form-control" placeholder="Пароль"%}
+            </div>
+            {% if form.password2.errors %}
+
+                <div class="form-group col-lg-9 has-error">
+                    <h5> {{ form.password2.errors }} </h5>
+                    {% render_field form.password2 class="form-control" placeholder="Повторите пароль"%}
+                </div>
+            {% else %}
+                <div class="form-group col-lg-9">
+                    {% render_field form.password2 class="form-control" placeholder="Повторите пароль"%}
+                </div>
+            {% endif %}
+
+            <div class="form-group col-lg-9">
+                {% render_field form.email class="form-control" placeholder="email"%}
+            </div>
+            <div class="form-group col-lg-9">
+                {% render_field form.email class="form-control" placeholder="Повтотрите email"%}
+            </div>
+            <div class="form-group col-lg-5">
+                <input type="submit" class="form-control" >
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock  %}
+

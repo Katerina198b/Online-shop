@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'core',
     'shop',
     'product',
-]
+    'widget_tweaks',
+    ]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -123,10 +124,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/oem/Documents/technotrack/web/site/collected_static/'
-STATICFILES_DIRS = ('/home/oem/Documents/technotrack/web/site/src/static/', )
+STATICFILES_DIRS = ('/home/oem/Documents/technotrack/web/site/src/static/',
+                    '/home/oem/Documents/technotrack/web/site/src/core/static/',
+                    '/home/oem/Documents/technotrack/web/site/src/product/static/',
+                    '/home/oem/Documents/technotrack/web/site/src/shop/static/',
+                    )
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/home/oem/Documents/technotrack/web/site/media/'
 
 LOGIN_REDIRECT_URL = "core:main_page"
-LOGIN_URL = "core:login"
+LOGIN_URL = "login"

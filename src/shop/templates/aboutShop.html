@@ -1,12 +1,45 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}
     {{object.name|default:'Название магазина'}}
 {% endblock %})
 {% block content %}
-    <h3>{{object.name}}</h3>
-    Владелец: {{ object.owner }} <br>
-    <h4>Описание магазна:</h4>
-    {{ object.description }} <br> <br> <br>
-    Дата создания магазина: {{object.created_at}}<br> <br> <br>
+    {% if object.author == user %}
+        <a href="{% url "product:product_create" pk=object.pk %}">Добавить новый товар в магазин</a><br>
+        <a href="{% url "shop:update" pk=object.pk %}">Редактировать информацию об магазине</a><br>
+
+    {% endif %}
+
+    <h1>{{object.name}}</h1>
+    <h5>Владелец:</h5> ({{ object.author }}) {{ object.owner_name }}<br>
+    <h5>Описание магазна:</h5> {{ object.description }} <br>
+    <h5>Дата создания магазина: </h5> {{object.created_at}} <br>
+    <br> <br> <br>
+    {% for product in object.product_set.all %}
+        <div class="col-lg-4">
+        {% if product.author == user %}
+            <a href="{%url  "product:about_product" pk=product.id %}">{{ product.name }}</a><br>
+            {% if product.publish == null %}
+                Не опубликовано <br>
+            {% endif %}
+            {% if product.image %}
+                <img src="{{ product.image.url }}" height="300" width="300"/> <br>
+            {% else %}
+                <img src="{% static "img/product-default.jpg" %}" />
+            {% endif %}
+
+
+        {% else %}
+            {% if product.publish %}
+                {% if product.image %}
+                    <img src="{{ product.image.url }}"height="300" width="300" /> <br>
+                {% else %}
+                    <img src="{% static "img/product-default.jpg" %}" />
+                {% endif %}
+                <a href="{%url  "product:about_product" pk=product.id %}">{{ product.name }}</a><br>
+            {% endif %}
+         {% endif %}
+        </div>
+    {% endfor %}
     <a href="{% url "shop:shops" %}">Назад к списку магазинов</a><br>
  {% endblock %}

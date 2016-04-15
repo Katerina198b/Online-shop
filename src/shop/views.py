@@ -2,16 +2,25 @@
 
 from django.shortcuts import render, resolve_url
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from .models import Shop
 from shop.models import Shop
 from forms import *
 
+class ShopUpdate(UpdateView):
+
+    model = Shop
+    template_name = "updateShop.html"
+    fields = ('name', 'description', 'owner_name')
+
+    def get_success_url(self):
+        return resolve_url('shop:about_shop', pk=self.object.pk)
 
 class ShopCreate(CreateView):
+
     model = Shop
     template_name = "createShop.html"
-    fields = ('title', 'text')
+    fields = ('name', 'description', 'owner_name')
 
     def get_success_url(self):
         return resolve_url('shop:about_shop', pk=self.object.pk)
@@ -19,13 +28,15 @@ class ShopCreate(CreateView):
     # в этом методе сохраняется модель
     def form_valid(self, form):
         # в этот метод поступает форма
-        # form.instance.author = self.request.user
+        form.instance.author = self.request.user
         return super(ShopCreate, self).form_valid(form)
 
 
 class ShopDetail(DetailView):
+
     model = Shop
     template_name = "aboutShop.html"
+
 
 
 class ShopList(ListView):
