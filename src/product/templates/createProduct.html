@@ -3,10 +3,11 @@
 {% block title %}
     Создать товар{% endblock %})
 {% block content %}
-         <form method="post" class="form-horizontal " role="form" enctype="multipart/form-data">
+    <br>
+         <form method="post" class="form-horizontal all" role="form" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="form-group col-sm-8">
 
+            <div class="form-group col-lg-6">
                 {% render_field form.name placeholder="Название товара" class="form-control" %}
             </div>
             {% if form.description.errors %}
@@ -19,6 +20,9 @@
                     {% render_field form.description  placeholder="Описание"  class="form-control" %}
                 </div>
             {% endif %}
+            <div class="form-group col-sm-8">
+                {% render_field form.category  placeholder="Категории"  class="form-control chosen-select" %}
+            </div>
             <div class="form-group col-sm-8">
                 {% render_field form.image  %}
             </div>

@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'shop',
     'product',
     'widget_tweaks',
+    'likes',
+    'haystack',
+    'search',
+    'adjacent',
     ]
 
 MIDDLEWARE_CLASSES = [
@@ -67,12 +71,18 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'adjacent.context_processors.main',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'application.wsgi.application'
+
+#centrifugo
+CENTRIFUGE_ADDRESS = 'http://ws.disaev.ru'
+CENTRIFUGE_SECRET = 'e830c79a-7e1b-4291-9c64-6eb57653c23a'
+CENTRIFUGE_TIMEOUT = 10
 
 
 # Database
@@ -135,3 +145,13 @@ MEDIA_ROOT = '/home/oem/Documents/technotrack/web/site/media/'
 
 LOGIN_REDIRECT_URL = "core:main_page"
 LOGIN_URL = "login"
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+
+}
+

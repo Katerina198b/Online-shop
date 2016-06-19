@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-v
 from django import forms
+from .models import *
 '''
 принимает данные из запроса, валидирует их относительно внутренних полей,
 которые мы создали. ПРиводит нас к нужному представлению на языке питон
@@ -9,9 +10,10 @@ from django import forms
 class ProductListForm(forms.Form):
 
     #quantity = forms.ChoiceField(choices=)
+    search_tag = forms.ModelMultipleChoiceField(queryset=Category.objects)
     search = forms.CharField(required=False, label="Поиск по имени товара")
-    sort_field = forms.ChoiceField(choices=(('changed_at', 'Дата изменения'),
-            ('created_at', 'Дата создания')),required=False, label='Сортировка ')
+    sort_field = forms.ChoiceField(choices=(('changed_at', 'Дата изменения'), ('comment_count', 'Кол-во комментарий'),
+            ('created_at', 'Дата создания'), ('shop', 'Название магазина')),required=False, label='Сортировка ')
 
     # возвращает словарик cleaning_data
     # либо выбрасывает exception

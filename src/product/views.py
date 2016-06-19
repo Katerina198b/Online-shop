@@ -1,29 +1,17 @@
 # -*- coding: utf-8 -*-v
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, resolve_url, get_object_or_404
 from django.shortcuts import HttpResponse, HttpResponseRedirect
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from shop.models import Shop
-from .models import Product, Comment
 
+from likes.models import Likes
+from .models import Product, Comment
+from django.db import models
 from forms import *
 from django.conf import settings
 from django.shortcuts import redirect
-
-def productLike(request, pk):
-    product = Product.objects.get(id=pk)
-    product.like = product.like + 1
-    product.save();
-    render(request, "like.html")
-    return render(request, 'like.html', {'product': product})
-
-def productDislike(request, pk):
-    product = Product.objects.get(id=pk)
-    product.like = product.dislike + 1
-    product.save();
-    render(request, "dislike.html")
-    return render(request, 'like.html', {'product': product})
-
-
+from django.http import JsonResponse
 
 
 class ProductUpdate(UpdateView):
@@ -34,15 +22,13 @@ class ProductUpdate(UpdateView):
 
 
     def get_success_url(self):
-
         return resolve_url('product:about_product', pk=self.object.pk)
-
 
 class ProductCreate(CreateView):
 
     model = Product
     template_name = "createProduct.html"
-    fields = ('name', 'description', 'image', 'publish')
+    fields = ('name', 'description', 'image', 'publish', 'category')
 
 
     def dispatch(self, request, pk=None, *args, **kwargs):
@@ -51,7 +37,6 @@ class ProductCreate(CreateView):
 
 
     def get_success_url(self):
-
         return resolve_url('product:about_product', pk=self.object.pk)
 
 
@@ -62,13 +47,10 @@ class ProductCreate(CreateView):
         form.instance.author = self.request.user
         return super(ProductCreate, self).form_valid(form)
 
-
 class CommentsUpdate(DetailView):
 
     template_name = "updateComments.html"
     model = Product
-
-
 
 class ProductDetail(CreateView):
 
@@ -76,34 +58,26 @@ class ProductDetail(CreateView):
     template_name = "aboutProduct.html"
     fields = ('text', )
 
-
     def get_context_data(self, **kwargs):
-
         self.context = super(ProductDetail, self).get_context_data(**kwargs)
         self.context['product'] = self.product
         return self.context
 
 
     def dispatch(self, request, pk=None, *args, **kwargs):
-
         self.product = get_object_or_404(Product, id=pk)
-
         return super(ProductDetail, self).dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-
         return resolve_url('product:about_product', pk=self.product.pk)
 
 
     def form_valid(self, form):
-
-
         if not self.request.user.is_authenticated():
-            return redirect('%s?next=%s' % (settings.LOGIN_URL, self.request.path))
+            return redisrect('%s?next=%s' % (settings.LOGIN_URL, self.request.path))
         form.instance.product = self.product
         form.instance.author = self.request.user
         return super(ProductDetail, self).form_valid(form)
-
 
 class ProductList(ListView):
 
@@ -119,11 +93,15 @@ class ProductList(ListView):
             queryset = queryset.filter(name__icontains=self.form.cleaned_data['search'])
         # if self.sort_field:
         #    queryset = queryset.order_by(self.sort_field)[:10]
-        if self.form.cleaned_data.get('sort_field'):
-            queryset = queryset.order_by(self.form.cleaned_data['sort_field'])[:10]
+        if self.form.cleaned_data.get('search_tag'):
+                queryset = queryset.filter(category__in=self.form.cleaned_data['search_tag'])
         # queryset = queryset.filter(author=self.request.user)
         #if self.form.cleanded_data.get('quantity'):
         #    queryset = queryset[:self.form.sort_field]
+        queryset = queryset.annotate(comment_count=models.Count('comments'))
+        if self.form.cleaned_data.get('sort_field'):
+            queryset = queryset.order_by(self.form.cleaned_data['sort_field'])[::-1]
+
         return queryset
 
     def dispatch(self, request, *args, **kwargs):

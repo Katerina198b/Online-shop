@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
+{% load widget_tweaks %}
 <head>
     {% block title %} Login {% endblock %}
 </head>
 <body>
     {% block content %}
-        <div class="container">
-            <div class="col-lg-6">
+        <div class="all">
+            <div class="col-lg-7">
                 <h3>Авторизация</h3>
                 <form method="post" class="form-inline">
                     {% csrf_token %}
-                    {{ form }}
-                    <input type="submit">
+                    {% render_field form.username class="form-control" placeholder="Логин"%}
+                    {% render_field form.password class="form-control" placeholder="Пароль"%}
+                    <input type="submit" class="btn btn-default">
+
                 </form>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-5">
             </div>
         </div>
         {% endblock  %}

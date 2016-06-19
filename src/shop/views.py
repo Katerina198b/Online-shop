@@ -4,8 +4,9 @@ from django.shortcuts import render, resolve_url
 from django.shortcuts import HttpResponse, HttpResponseRedirect
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from .models import Shop
-from shop.models import Shop
+from product.models import *
 from forms import *
+from django.db import models
 
 class ShopUpdate(UpdateView):
 
@@ -36,6 +37,12 @@ class ShopDetail(DetailView):
 
     model = Shop
     template_name = "aboutShop.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ShopDetail, self).get_context_data(**kwargs)
+        comments = self.object.product_set.annotate(comment_count=models.Count('comments'))
+        context['comments'] = comments.aggregate(count_comments=models.Sum('comment_count'))
+        return context
 
 
 

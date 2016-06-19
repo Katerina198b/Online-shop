@@ -1,0 +1,59 @@
+{% load widget_tweaks %}
+<head>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/i18n/jquery-ui-i18n.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+
+</head>
+
+<div class="row">
+
+    <form method="get" action=".">
+        <div class="col-lg-2">
+            {% render_field form.q class="form-control" placeholder="Искать.." %}
+        </div>
+        <div class="col-lg-1">
+            <input type="submit" value="Search" class="form-control">
+        </div>
+    </form>
+  </div>
+
+
+{% if query %}
+<div class="row">
+  <div class="col-md-12">
+    <h3>Результаты поиска</h3>
+    {% for q in page.object_list %}
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <a href="{{ q.object.get_absolute_url }}">{{ q.object.name }} (rating: {{ q.object.like }})</a>
+      </div>
+      <div class="panel-footer">{{ q.object.description|truncatechars:50 }}</div>
+    </div>
+    {% empty %}
+    <p>Ничего не найдено.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    {% if page.has_previous or page.has_next %}
+    <div>
+      {% if page.has_previous %}<a href="?q={{ query }}&page={{ page.previous_page_number }}">{% endif %}« Previous{% if page.has_previous %}</a>{% endif %}
+
+      {% if page.has_next %}<a href="?q={{ query }}&page={{ page.next_page_number }}">{% endif %}Next »{% if page.has_next %}</a>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}

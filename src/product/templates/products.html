@@ -1,40 +1,42 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
 {% block title %}
-    Товары
+     Товары
 {% endblock %})
 {% block content %}
-    <h1>Список товаров</h1> <br>
-    <form action="" method="get" class="form-inline" role="form">
-        <div class="form-group">
-            <h5>Поиск товара по имени </h5>{% render_field form.search class="form-control"%}
-        </div>
-        <div class="form-group">
-            {% render_field form.sort_field class="form-control" %}
-        </div>
-        <div class="form-group">
-            <input type="submit" class="form-control" >
-        </div>
-    </form>
-    <br>
-        <table class="table table-hover">
-           <tr>
-                <th>НАЗВАНИЕ</th>
-                <th>МАГАЗИН</th>
-                <th>ДАТА СОЗДАНИЯ</th>
-                <th>ДАТА ИЗМЕНЕНИЯ</th>
-           </tr>
+    <div id="search">
+        <h2> Поиск </h2>
+        <form action="" method="get" class="form-horizontal" role="form">
+            <div class="form-group ">
+                Название товара
+                {% render_field form.search class="form-control" %}
+            </div>
+            <div class="form-group">
+                Категории
+                {% render_field form.search_tag class=" chosen-select form-control" placeholder="Выберите категорию"%}
+            </div>
+            <h2> Cортировка </h2>
+            <div class="form-group ">
+                {% render_field form.sort_field class="form-control" placeholder="Сортировать по" %}
+            </div>
+            <div class="form-group ">
+                <input type="submit" class="form-control" >
+            </div>
+        </form>
+    </div>
 
-
-            {% for object in object_list %}
-                {% if object.publish %}
-                    <tr>
-                         <td><a href="{%url  "product:about_product" pk=object.id %}">{{ object.name }}</a></td>
-                         <td> {{ object.shop }}</td>
-                         <td> {{ object.created_at }} </td>
-                         <td> {{ object.changed_at }} </td>
-                    </tr>
+    <div id="products">
+        <h1>Список товаров</h1>
+        {% for object in object_list %}
+            <div class="col-lg-4">
+                {% if object.publish  %}
+                    <img src="{{ object.image.url }}" height="200" /> <br>
+                    <a href="{%url  "product:about_product" pk=object.id %}">{{ object.name }}</a> <br>
+                    {{ object.shop }} <br>
+                    <span class="glyphicon glyphicon-thumbs-up"></span> {{ object.comment_count }}
                 {% endif %}
-            {% endfor %}
-        </table>
- {% endblock %}
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
