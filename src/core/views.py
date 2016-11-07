@@ -11,6 +11,8 @@ from django.contrib import auth
 
 
 
+
+
 def getMaimPage(request):
     return render(request, 'mainPage.html')
 
@@ -28,10 +30,7 @@ class RegisterFormView(FormView):
     #success_url = "core:mainPage"
 
     def get_success_url(self):
-
         return resolve_url('core:main_page')
-
-
 
     def form_valid(self, form):
         # Создаём пользователя, если данные в форму были введены корректно.
