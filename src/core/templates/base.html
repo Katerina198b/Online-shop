@@ -1,7 +1,6 @@
 {% load static %}
 {% load widget_tweaks %}
 <head>
-    <link rel="stylesheet" href="{% static "core/css/base.css" %}">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -18,57 +17,6 @@
 
 </head>
 <body>
-
-    <div id="header">
-        <div class="col-lg-6">
-            <img src="{% static "core/logo.jpg" %}" height="80" />
-        </div>
-
-        <div class="col-lg-6" id="name">
-            <div class="col-lg-4">
-                <iframe src="/search/" scrolling="no" allowtransparency frameborder="no" seamless height="70px" width="100%">
-                </iframe>
-            </div>
-            <div class="col-lg-4">
-                {% if user.is_authenticated %}
-                    <div> {{ user.username }} </div>
-                    <a href="{% url "logout" %}"> Выход </a>
-                {% else %}
-                    <div><a href="{% url "login" %}"> Вход </a></div>
-                    <div><a href="{% url "core:register" %}"> Регистрация </a></div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-
-    <div id="menu">
-        <div class="col-lg-2">
-            <a href="{% url "core:main_page" %}">На главную </a>
-        </div>
-        <div class="col-lg-2">
-            <a href="{% url "product:products" %}">Товары</a>
-        </div>
-        <div class="col-lg-2">
-            <a href="{% url "shop:shops" %}">Магазины</a>
-        </div>
-        <div class="col-lg-2">
-            Мастер Классы
-        </div>
-        <div class="col-lg-2">
-            Корзина
-        </div>
-        <div class="col-lg-2">
-            {% if user.is_authenticated %}
-                {% if user.shop_set.all.first != null %}
-                    <a href="{%url "shop:about_shop" pk=user.shop_set.all.first.id %}"> Мой магазин </a>
-                {% else %}
-                    <a href="{% url "shop:shop_create" %}"> Cоздать свой магазин </a>
-                {% endif %}
-            {% endif %}
-            </div>
-    </div>
 <title>{% block title %}{% endblock %}</title>
 {% block content %} {% endblock %}
-
-<div id="footer">Низ сайта</div>
 </body>

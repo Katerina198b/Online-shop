@@ -1,5 +1,0 @@
-
-{{ object.name }}
-{% for comment in object.comments.all %}
-  {{ comment.text }}
-{% endfor %}
